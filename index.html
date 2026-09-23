@@ -113,7 +113,7 @@ h1.name em{font-style:italic;color:var(--teal)}
 /* ---------- Photo carousel ---------- */
 .polaroid{margin:0;position:relative;cursor:auto;justify-self:end;width:100%;max-width:440px}
 .frame{position:relative;aspect-ratio:16/10;border-radius:16px;overflow:hidden;background:var(--paper-2);box-shadow:0 30px 60px -30px rgba(10,37,64,.45),0 0 0 1px var(--line)}
-.frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.06);transition:opacity 1.2s ease,transform 9s linear}
+.frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.04);transition:opacity .9s ease,transform 5s linear}
 .frame img.on{opacity:1;transform:scale(1)}
 .frame:after{content:"";position:absolute;inset:auto 0 0 0;height:40%;background:linear-gradient(transparent,rgba(4,12,22,.55));pointer-events:none}
 .cap{position:absolute;left:16px;right:16px;bottom:12px;z-index:2;color:#fff;display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
@@ -457,9 +457,9 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-bet
         <div class="stamp">last updated: <span id="nowDate"></span> · <a href="https://nownownow.com/about" target="_blank" rel="noopener">what is a now page?</a></div>
       </div>
       <div class="now-card look">
-        <h3>Looking for my next lab</h3>
+        <h3>Open to collaborations</h3>
         <p id="lookText"></p>
-        <p>If your group works where methods meet patients, I'd love to hear what you're building.</p>
+        <p>If you or your group work where methods meet the real world, I'd love to hear what you're building.</p>
         <div class="look-cta">
           <button class="btn btn-inv" type="button" data-open-contact>Write to me <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/></svg></button>
           <a class="btn" data-link="linkedin" href="#" target="_blank" rel="noopener">LinkedIn <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
@@ -514,7 +514,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-bet
    CONFIG: modifica qui testi, foto e link. Il resto si aggiorna da solo.
    ========================================================================= */
 const CONFIG = {
-  photoSeconds: 8,          // secondi per ogni foto del carosello
+  photoSeconds: 4,          // secondi per ogni foto del carosello
   photos: [
     { src: "img/epfl.jpg",      pos: "35% 42%", title: "EPFL, Lausanne",   note: "visiting researcher · 2025–26" },
     { src: "img/lake.jpg",      pos: "24% 62%", title: "Lake Geneva",       note: "best place to debug is off the keyboard" },
@@ -535,15 +535,15 @@ const CONFIG = {
     "<b>Reviewing for NeurIPS 2026</b> and serving on the early-career editorial board of <i>npj Digital Medicine</i>.",
     "<b>Learning</b> how LLMs behave at the bedside, a thread I started at EPFL."
   ],
-  lookingFor: "A postdoc after my defense, on multimodal and clinical AI: messy data, real patients, evaluation that holds up outside the lab."
+  lookingFor: "Resilient multimodal AI, LLMs and agentic systems: messy data, real-world settings, and evaluation that holds up outside the lab."
 };
 
 /* ---------- Model card content ---------- */
 const CARD = {
-  tags: [["t","clinical-ai"],["t","multimodal"],["t","fairness"],["t","domain-shift"],["","neurodegeneration"],["","llms"],["","languages: it · en"]],
+  tags: [["t","clinical-ai"],["t","multimodal"],["t","fairness"],["t","domain-shift"],["t","llms"],["t","agentic-ai"]],
   rows: [
     { k:"Model details", p:"Arianna Francesconi. Pre-trained in Rome (Italian National PhD in AI, Università Campus Bio-Medico), fine-tuned in Lausanne (EPFL, visiting researcher 2025–26)." },
-    { k:"Intended use", p:"Research groups that need methods to survive contact with the clinic: learning from imbalanced, confounded, shifted or incomplete data, and evaluating it honestly." },
+    { k:"Intended use", p:"Research groups that need methods to survive contact with the real world: learning from imbalanced, confounded, shifted or incomplete data, building with LLMs and agents, and evaluating it all honestly." },
     { k:"Training data", p:"Voice recordings, keystrokes, brain scans, clinical records and text, plus many hours in a neurology clinic listening to how data actually get made.", muted:true },
     { k:"Strengths", list:[
         "Translating between neurologists and engineers, in both directions.",
@@ -557,7 +557,7 @@ const CARD = {
     ]},
     { k:"Out-of-distribution behaviour", p:"Sings in a gospel choir, volunteers with the Italian Red Cross, mentors students in STEM, and spends weekends on lakes and mountains." },
     { k:"Ethical considerations", p:"A clinical model that is accurate but unfair is not finished. Fairness and external validation are part of the method, not an appendix." },
-    { k:"How to cite", p:"In person, preferably over coffee." }
+    { k:"How to cite", p:"In person, preferably over hot chocolate." }
   ]
 };
 
@@ -636,7 +636,7 @@ if('IntersectionObserver' in window){
 (function(){
   const frame=$('#frame'), bar=$('#pbar'), P=CONFIG.photos; let i=0, timer=null, paused=false;
   frame.innerHTML = P.map((p,k)=>`<img src="${p.src}" alt="${p.title}" style="object-position:${p.pos}" ${k?'loading="lazy"':''}>`).join('') +
-    `<div class="cap"><div><b id="capT"></b><small id="capN"></small></div><span class="idx" id="capI"></span></div>`;
+    `<div class="cap"><div><b id="capT"></b><small id="capN"></small></div></div>`;
   bar.innerHTML = P.map((p,k)=>`<button aria-label="Photo ${k+1}: ${p.title}"><i></i></button>`).join('');
   bar.style.setProperty('--dur', CONFIG.photoSeconds+'s');
   const imgs=frame.querySelectorAll('img'), btns=bar.querySelectorAll('button');
@@ -646,7 +646,6 @@ if('IntersectionObserver' in window){
     btns.forEach((b,j)=>{ b.classList.remove('on'); b.classList.toggle('done',j<i); });
     void bar.offsetWidth; btns[i].classList.add('on');
     $('#capT').textContent=P[i].title; $('#capN').textContent=P[i].note;
-    $('#capI').textContent=String(i+1).padStart(2,'0')+' / '+String(P.length).padStart(2,'0');
   }
   btns.forEach((b,j)=>b.addEventListener('click',()=>show(j)));
   // avanzamento legato alla fine dell'animazione della barra (si ferma in pausa al passaggio del mouse)
@@ -693,7 +692,7 @@ if('IntersectionObserver' in window){
   $('#mcView').innerHTML = CARD.rows.map(r=>`<div class="mc-row ${r.cls||''}"><h3>${r.k}</h3><div>${
     r.list?`<ul>${r.list.map(x=>`<li>${x}</li>`).join('')}</ul>`:`<p class="${r.muted?'muted':''}">${r.p}</p>`}</div></div>`).join('');
   const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
-  let raw = `<span class="d">---</span>\n<span class="k">model_name</span>: arianna-francesconi\n<span class="k">version</span>: <span class="s">${esc(CONFIG.nowUpdated)}</span>\n<span class="k">pipeline_tag</span>: clinical-question → method → evidence\n<span class="k">tags</span>: [${CARD.tags.map(t=>esc(t[1])).filter(t=>!t.startsWith('languages')).join(', ')}]\n<span class="k">languages</span>: [it, en]\n<span class="k">license</span>: open-to-collaboration\n<span class="d">---</span>\n\n<span class="h"># Model card: Arianna Francesconi</span>\n`;
+  let raw = `<span class="d">---</span>\n<span class="k">model_name</span>: arianna-francesconi\n<span class="k">version</span>: <span class="s">${esc(CONFIG.nowUpdated)}</span>\n<span class="k">pipeline_tag</span>: clinical-question → method → evidence\n<span class="k">tags</span>: [${CARD.tags.map(t=>esc(t[1])).join(', ')}]\n<span class="k">license</span>: open-to-collaboration\n<span class="d">---</span>\n\n<span class="h"># Model card: Arianna Francesconi</span>\n`;
   CARD.rows.forEach(r=>{ raw += `\n<span class="h">## ${esc(r.k)}</span>\n` + (r.list? r.list.map(x=>'- '+esc(x)).join('\n') : esc(r.p)) + '\n'; });
   $('#mcRaw').innerHTML = raw;
   document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{
